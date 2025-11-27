@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quezon NHS Daily Wellness Check</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="WellnessApp">
+    
+    <style>
+        /* YOUR EXISTING CSS GOES HERE - DON'T CHANGE */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f8ff;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        /* ... KEEP ALL YOUR EXISTING STYLES ... */
+    </style>
+</head>
+<body>
+    <!-- YOUR EXISTING HTML BODY GOES HERE - DON'T CHANGE -->
+    <div class="container">
+        <h1 style="font-size: 23px; text-align: center;">🌞 Quezon NHS Daily Wellness Check</h1>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- SECTION 1: Emotion Selection -->
+        <div id="section1" class="section">
+            <!-- KEEP ALL YOUR EXISTING SECTIONS -->
+        </div>
+
+        <!-- SECTION 2: Counselor Support -->
+        <div id="section2" class="section">
+            <!-- KEEP ALL YOUR EXISTING SECTIONS -->
+        </div>
+
+        <!-- SECTION 3: Quick Coping Tip & Form Link -->
+        <div id="section3" class="section">
+            <!-- KEEP ALL YOUR EXISTING SECTIONS -->
+        </div>
+
+        <!-- SECTION 4: Confirmation -->
+        <div id="section4" class="section">
+            <!-- KEEP ALL YOUR EXISTING SECTIONS -->
+        </div>
+    </div>
+
+    <script>
+        // YOUR EXISTING JAVASCRIPT GOES HERE
+        let checkinData = {
+            emotion: '',
+            counselorRequest: '',
+            timestamp: '',
+            urgency: 'normal'
+        };
+
+        function selectEmotion(emotion, element) {
+            // KEEP ALL YOUR EXISTING FUNCTIONS
+        }
+
+        // ... ALL YOUR OTHER FUNCTIONS ...
+
+        // ADD THIS NEW CODE AT THE END OF YOUR SCRIPT:
+        
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope: ', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed: ', error);
+                });
+            });
+        }
+
+        // Install Prompt for PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallButton();
+        });
+
+        function showInstallButton() {
+            // Only show if not already installed
+            if (deferredPrompt) {
+                const installBtn = document.createElement('button');
+                installBtn.innerHTML = '📱 Install App';
+                installBtn.id = 'installBtn';
+                installBtn.style.cssText = `
+                    position: fixed; bottom: 20px; right: 20px; 
+                    background: #4CAF50; color: white; padding: 12px 18px;
+                    border: none; border-radius: 25px; z-index: 1000;
+                    font-size: 14px; font-weight: bold; cursor: pointer;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                `;
+                installBtn.onclick = installApp;
+                document.body.appendChild(installBtn);
+            }
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User installed the app');
+                        // Hide the install button
+                        const installBtn = document.getElementById('installBtn');
+                        if (installBtn) installBtn.remove();
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // Initialize
+        updateProgress(25);
+    </script>
+</body>
+</html>
